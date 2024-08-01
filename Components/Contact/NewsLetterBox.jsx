@@ -1,4 +1,31 @@
+"use client";
+import { useState } from "react";
+import { useFormik } from "formik";
+import * as yup from "yup";
+
 const NewsLetterBox = () => {
+  const [contact, setContact] = useState("");
+
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      email: "",
+    },
+    onSubmit: async () => {
+      await new Promise((resolve) => {
+        setContact("Form Submitted");
+        setTimeout(resolve, 200);
+      });
+    },
+    validationSchema: yup.object({
+      name: yup.string().trim().required("Full Name Required"),
+      email: yup
+        .string()
+        .email("Must be valid Email")
+        .required("Enter Valid Email Address"),
+    }),
+  });
+
   return (
     <div
       className="wow fadeInUp relative z-10 rounded-md bg-primary/[3%] p-8 dark:bg-primary/10 sm:p-11 lg:p-8 xl:p-11"
@@ -11,19 +38,31 @@ const NewsLetterBox = () => {
         Lorem ipsum dolor sited Sed ullam corper consectur adipiscing Mae ornare
         massa quis lectus.
       </p>
-      <form>
+      <form onSubmit={formik.handleSubmit}>
         <input
           type="text"
           name="name"
           placeholder="Enter your name"
           className="mb-4 w-full rounded-md border border-body-color border-opacity-10 py-3 px-6 text-base font-medium text-body-color placeholder-body-color outline-none focus:border-primary focus:border-opacity-100 focus-visible:shadow-none dark:border-white dark:border-opacity-10 dark:bg-[#242B51] focus:dark:border-opacity-50"
+          {...formik.getFieldProps("name")}
         />
+        {formik.errors.name && (
+          <p className="text-red font-medium text-lg text-center py-3">
+            {formik.errors.name}
+          </p>
+        )}
         <input
           type="email"
           name="email"
           placeholder="Enter your email"
           className="mb-4 w-full rounded-md border border-body-color border-opacity-10 py-3 px-6 text-base font-medium text-body-color placeholder-body-color outline-none focus:border-primary focus:border-opacity-100 focus-visible:shadow-none dark:border-white dark:border-opacity-10 dark:bg-[#242B51] focus:dark:border-opacity-50"
+          {...formik.getFieldProps("email")}
         />
+        {formik.errors.email && (
+          <p className="text-red font-medium text-lg text-center py-3">
+            {formik.errors.email}
+          </p>
+        )}
         <input
           type="submit"
           value="Subscribe"
