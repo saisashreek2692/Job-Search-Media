@@ -1,6 +1,33 @@
+"use client";
+import { useState } from "react";
+
 import NewsLetterBox from "./NewsLetterBox";
+import { useFormik } from 'formik';
+import * as yup from 'yup';
 
 const Contact = () => {
+
+ const [contact, setContact] = useState("");
+
+
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      email: "",
+      message: ""
+    },
+    onSubmit: async () => {
+      await new Promise((resolve) => {
+        setContact("Form Submitted")
+        setTimeout(resolve, 200)
+      })
+    },
+    validationSchema: yup.object({
+      name: yup.string().trim().required("Full Name Required"),
+      email: yup.string().email("Must be valid Email").required("Enter Valid Email Address"),
+      message: yup.string().trim().required("Enter Your Message")
+    })
+  });
   return (
     <section id="contact" className="overflow-hidden py-16 md:py-20 lg:py-28">
       <div className="container">
@@ -17,7 +44,7 @@ const Contact = () => {
               <p className="mb-12 text-base font-medium text-body-color">
                 Our support team will get back to you ASAP via email.
               </p>
-              <form>
+              <form onSubmit={formik.handleSubmit}>
                 <div className="-mx-4 flex flex-wrap">
                   <div className="w-full px-4 md:w-1/2">
                     <div className="mb-8">
@@ -31,7 +58,11 @@ const Contact = () => {
                         type="text"
                         placeholder="Enter your name"
                         className="w-full rounded-md border border-transparent py-3 px-6 text-base text-body-color placeholder-body-color shadow-one outline-none focus:border-primary focus-visible:shadow-none dark:bg-[#242B51] dark:shadow-signUp"
+                        {...formik.getFieldProps("name")}
                       />
+                      {formik.touched.name && formik.errors.name ? (
+                        <p className="text-red font-medium text-lg text-center py-3">{formik.errors.name}</p>
+                      ) : null}
                     </div>
                   </div>
                   <div className="w-full px-4 md:w-1/2">
@@ -46,7 +77,11 @@ const Contact = () => {
                         type="email"
                         placeholder="Enter your email"
                         className="w-full rounded-md border border-transparent py-3 px-6 text-base text-body-color placeholder-body-color shadow-one outline-none focus:border-primary focus-visible:shadow-none dark:bg-[#242B51] dark:shadow-signUp"
+                        {...formik.getFieldProps("email")}
                       />
+                      {formik.touched.email && formik.errors.email ? (
+                        <p className="text-red font-medium text-lg text-center py-3">{formik.errors.email}</p>
+                      ) : null}
                     </div>
                   </div>
                   <div className="w-full px-4">
@@ -62,7 +97,11 @@ const Contact = () => {
                         rows={5}
                         placeholder="Enter your Message"
                         className="w-full resize-none rounded-md border border-transparent py-3 px-6 text-base text-body-color placeholder-body-color shadow-one outline-none focus:border-primary focus-visible:shadow-none dark:bg-[#242B51] dark:shadow-signUp"
+                        {...formik.getFieldProps("message")}
                       ></textarea>
+                      {formik.touched.message && formik.errors.message ? (
+                        <p className="text-red font-medium text-lg text-center py-3">{formik.errors.message}</p>
+                      ) : null}
                     </div>
                   </div>
                   <div className="w-full px-4">
