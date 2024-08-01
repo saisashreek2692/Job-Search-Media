@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import menuData from "./menuData";
 import Link from "next/link";
 import Image from "next/image";
+import ThemeToggler from "./ThemeToggler";
 
 const Header = () => {
   // Navbar toggle
@@ -147,7 +148,7 @@ const Header = () => {
                   Sign Up
                 </Link> */}
                 <div>
-                  {/* <ThemeToggler /> */}
+                  <ThemeToggler />
                 </div>
               </div>
             </div>
